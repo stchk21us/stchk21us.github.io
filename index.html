@@ -1222,14 +1222,18 @@ function finishSlate(){
   document.querySelectorAll('#hero .rev').forEach(el=>el.classList.add('in'));
   initTW();
 }
-window.addEventListener('load',()=>{
+// the clock starts now, not on window.load — load waits on every video byte and would pin the slate
+let pageLoaded = document.readyState === 'complete';
+window.addEventListener('load',()=>{ pageLoaded = true; });
+{
   const t0 = performance.now(), MIN = 1400, MAX = 3500;
   (function waitPre(){
     const el = performance.now() - t0;
-    if (el >= MIN && (preDone >= preList.length * 0.5 || el >= MAX)) finishSlate();
+    const ready = pageLoaded && preDone >= preList.length * 0.5;
+    if (el >= MIN && (ready || el >= MAX)) finishSlate();
     else setTimeout(waitPre, 150);
   })();
-});
+}
 
 // ---- typewriter entrances ----
 const twOK = !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1472,9 +1476,7 @@ nav.addEventListener('click',e=>{ if(e.target.tagName==='A') nav.classList.remov
     v.src=cell.getAttribute('data-clip');
     cell.appendChild(v);cell.__v=v;
   }
-  // start preloading everything immediately, while the slate is still up
-  lcells.forEach(function(c){if(!c.__v&&loadQ.indexOf(c)<0)loadQ.push(c);});
-  pump();
+  // only the first screenful is queued up front; the rest load as they scroll into view
   // visible: play; offscreen: pause (decoders idle, but data stays cached)
   var lio=new IntersectionObserver(function(es){
     es.forEach(function(en){
@@ -1485,7 +1487,7 @@ nav.addEventListener('click',e=>{ if(e.target.tagName==='A') nav.classList.remov
         else if(v!=='failed'){v.play().catch(function(){});}
       }else if(v&&v!=='failed'){v.pause();}
     });
-  },{rootMargin:'150px'});
+  },{rootMargin:'400px'});
   lcells.forEach(function(c){lio.observe(c);});
   // pause everything when the tab is hidden
   document.addEventListener('visibilitychange',function(){
@@ -1736,5 +1738,8 @@ nav.addEventListener('click',e=>{ if(e.target.tagName==='A') nav.classList.remov
   buildTear();setTimeout(buildTear,1200);
 })();
 </script>
+<!-- visitor stats: dashboard at https://ceofixer.goatcounter.com -->
+<script data-goatcounter="https://ceofixer.goatcounter.com/count"
+        async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
