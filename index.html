@@ -366,8 +366,19 @@ h1{
 .tech-lede{font-size:clamp(17px,1.8vw,24px);line-height:1.5;font-weight:500;max-width:680px;margin-bottom:60px}
 .tech-frames{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .tech-frames .frame img{aspect-ratio:16/9}
-.tech-frames .frame:nth-child(6) img{transform:scale(1.18)}
-.tech-frames .frame:nth-child(6):hover img{transform:scale(1.18)}
+.tech-frames .frame.zoom-crop img{transform:scale(1.18)}
+.tech-frames .frame.zoom-crop:hover img{transform:scale(1.18)}
+/* latest-release hero: one wide frame + a meta column */
+.rel-hero{display:grid;grid-template-columns:1fr 300px;gap:0 34px;align-items:start;margin-bottom:78px}
+.rel-hero .frame{background:#000}
+.rel-hero .frame img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.rel-meta{display:flex;flex-direction:column;align-items:flex-start;gap:13px;border-top:1px solid var(--rule);padding-top:14px}
+.rel-tag{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--red)}
+.rel-ti{font-family:var(--disp);font-size:26px;line-height:1.16;font-weight:600;letter-spacing:-.012em}
+.rel-note{font-size:14.5px;line-height:1.5;color:var(--ink-soft);max-width:34ch}
+.rel-role{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+.rel-link{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule);padding-bottom:3px;transition:color .28s var(--ease),border-color .28s var(--ease)}
+.rel-link:hover{color:var(--red);border-color:var(--red)}
 .tools{display:flex;flex-wrap:nowrap;gap:10px;max-width:none;overflow-x:auto}
 .tools i{white-space:nowrap;flex-shrink:0}
 .tools i{font-style:normal;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--rule);color:var(--ink-soft);padding:7px 13px;transition:border-color .28s var(--ease),color .28s var(--ease)}
@@ -1050,23 +1061,38 @@ footer{border-top:1px solid var(--rule-soft);padding:18px 28px 18px 64px;display
       <span class="sh-pg">Current</span>
     </div>
     <p class="tech-lede rev d1"><span class="mnote" style="top:-8px;right:-170px;transform:rotate(2deg)">robots on camera</span>At Skild AI I translate robotics and foundation-model breakthroughs into cinematic stories — product films, demo reels and technical visualizations for enterprise, investors and consumers. Machines learning to move; me, <span class="pu u2">filming them learning</span>.</p>
-    <div class="subhead rev"><span class="sh-no">06.1 /</span><span class="label">On location</span></div>
+    <div class="subhead rev"><span class="sh-no">06.1 /</span><span class="label">Latest release &mdash; S1</span></div>
+    <div class="rel-hero rev">
+      <div class="frame"><img src="assets/skild-s1-hero.jpg" alt="Skild AI &mdash; S1, autonomous assembly" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; MASTER</span></div>
+      <div class="rel-meta">
+        <span class="rel-tag">New &middot; 25.08.2026</span>
+        <h3 class="rel-ti">S1 &mdash; In-Context Learning for Robotics</h3>
+        <p class="rel-note">One video prompt. No fine-tuning. The robot learns a ten-minute task it has never seen.</p>
+        <span class="rel-role">Director &middot; Skild AI</span>
+        <a class="rel-link" href="https://skild.ai/blogs/s1" target="_blank" rel="noopener">Read the release &#8599;</a>
+      </div>
+    </div>
+    <div class="subhead rev"><span class="sh-no">06.2 /</span><span class="label">On location</span></div>
     <div class="tech-frames">
-      <div class="frame rev"><img src="assets/skild-g11.jpg" alt="Skild AI — humanoid in the fog" loading="lazy" style="object-position:70% 50%"><span class="fc">SKILD · LAB 01</span></div>
-      <div class="frame rev d1" id="skildFilm5" style="position:relative;cursor:pointer"><img src="assets/opt-11.jpg" alt="Skild AI — partner logos" loading="lazy"><button type="button" class="lp-play lp-mini" aria-label="Play Skild AI — office humanoid"><span class="lp-ring">▶</span></button><span class="fc">SKILD · LOC 02</span></div>
-      <div class="frame rev d1"><img src="assets/skild-05.jpg" alt="Skild AI — robot arm at the racking" loading="lazy"><span class="fc">SKILD · LOC 03</span></div>
-      <div class="frame rev d2" id="skildFilm" style="position:relative;cursor:pointer"><img src="assets/rob-04.jpg" alt="Skild AI — humanoid, white" loading="lazy"><button type="button" class="lp-play lp-mini" aria-label="Play Skild AI film"><span class="lp-ring">▶</span></button><span class="fc">SKILD · LAB 04</span></div>
-      <div class="frame rev d2" id="skildFilm4" style="position:relative;cursor:pointer"><img src="assets/skild-06.jpg" alt="Skild AI — frame 05" loading="lazy"><button type="button" class="lp-play lp-mini" aria-label="Play Skild AI — One Brain"><span class="lp-ring">▶</span></button><span class="fc">SKILD · LOC 05</span></div>
-      <div class="frame rev d3"><img src="assets/skild-10.jpg" alt="Skild AI — frame 06" loading="lazy"><span class="fc">SKILD · LAB 06</span></div>
-      <div class="frame rev"><img src="assets/skild-02.jpg" alt="Skild AI — frame 07" loading="lazy"><span class="fc">SKILD · LOC 07</span></div>
-      <div class="frame rev d1" id="skildFilm6" style="position:relative;cursor:pointer"><img src="assets/skild-13.jpg" alt="Skild AI — frame 08" loading="lazy"><button type="button" class="lp-play lp-mini" aria-label="Play Skild AI — AirPods"><span class="lp-ring">▶</span></button><span class="fc">SKILD · LAB 08</span></div>
-      <div class="frame rev d2"><img src="assets/skild-g03.jpg" alt="Skild AI — frame 09" loading="lazy"><span class="fc">SKILD · LOC 09</span></div>
-      <div class="frame rev"><img src="assets/skild-g04.jpg" alt="Skild AI — frame 10" loading="lazy"><span class="fc">SKILD · LAB 10</span></div>
-      <div class="frame rev d1"><img src="assets/skild-01.jpg" alt="Skild AI — frame 11" loading="lazy"><span class="fc">SKILD · LOC 11</span></div>
-      <div class="frame rev d2" id="skildFilm3" style="position:relative;cursor:pointer"><img src="assets/rob-01.jpg" alt="Skild AI — frame 12" loading="lazy"><button type="button" class="lp-play lp-mini" aria-label="Play Skild AI film 3"><span class="lp-ring">▶</span></button><span class="fc">SKILD · LAB 12</span></div>
-      <div class="frame rev" id="skildFilm2" style="position:relative;cursor:pointer"><img src="assets/skild-11.jpg" alt="Skild AI — frame 13" loading="lazy"><button type="button" class="lp-play lp-mini" aria-label="Play Skild AI — autonomous"><span class="lp-ring">▶</span></button><span class="fc">SKILD · LAB 13</span></div>
-      <div class="frame rev d1"><img src="assets/skild-15.jpg" alt="Skild AI — frame 14" loading="lazy"><span class="fc">SKILD · LAB 14</span></div>
-      <div class="frame rev d2"><img src="assets/skild-04.jpg" alt="Skild AI — frame 15" loading="lazy"><span class="fc">SKILD · LOC 15</span></div>
+      <div class="frame rev"><img src="assets/skild-g11.jpg" alt="Skild AI &mdash; humanoid in the fog" loading="lazy" style="object-position:70% 50%"><span class="fc">SKILD &middot; LAB 01</span></div>
+      <div class="frame rev d1"><img src="assets/opt-11.jpg" alt="Skild AI &mdash; partner logos" loading="lazy"><span class="fc">SKILD &middot; LOC 02</span></div>
+      <div class="frame rev d1"><img src="assets/skild-05.jpg" alt="Skild AI &mdash; robot arm at the racking" loading="lazy"><span class="fc">SKILD &middot; LOC 03</span></div>
+      <div class="frame rev d2"><img src="assets/rob-04.jpg" alt="Skild AI &mdash; humanoid, white" loading="lazy"><span class="fc">SKILD &middot; LAB 04</span></div>
+      <div class="frame rev d2"><img src="assets/skild-06.jpg" alt="Skild AI &mdash; frame 05" loading="lazy"><span class="fc">SKILD &middot; LOC 05</span></div>
+      <div class="frame rev d3 zoom-crop"><img src="assets/skild-10.jpg" alt="Skild AI &mdash; frame 06" loading="lazy"><span class="fc">SKILD &middot; LAB 06</span></div>
+      <div class="frame rev"><img src="assets/skild-02.jpg" alt="Skild AI &mdash; frame 07" loading="lazy"><span class="fc">SKILD &middot; LOC 07</span></div>
+      <div class="frame rev d1"><img src="assets/skild-13.jpg" alt="Skild AI &mdash; frame 08" loading="lazy"><span class="fc">SKILD &middot; LAB 08</span></div>
+      <div class="frame rev d2"><img src="assets/skild-g03.jpg" alt="Skild AI &mdash; frame 09" loading="lazy"><span class="fc">SKILD &middot; LOC 09</span></div>
+      <div class="frame rev"><img src="assets/skild-g04.jpg" alt="Skild AI &mdash; frame 10" loading="lazy"><span class="fc">SKILD &middot; LAB 10</span></div>
+      <div class="frame rev d1"><img src="assets/skild-01.jpg" alt="Skild AI &mdash; frame 11" loading="lazy"><span class="fc">SKILD &middot; LOC 11</span></div>
+      <div class="frame rev d2"><img src="assets/rob-01.jpg" alt="Skild AI &mdash; frame 12" loading="lazy"><span class="fc">SKILD &middot; LAB 12</span></div>
+      <div class="frame rev"><img src="assets/skild-11.jpg" alt="Skild AI &mdash; frame 13" loading="lazy"><span class="fc">SKILD &middot; LAB 13</span></div>
+      <div class="frame rev d1"><img src="assets/skild-15.jpg" alt="Skild AI &mdash; frame 14" loading="lazy"><span class="fc">SKILD &middot; LAB 14</span></div>
+      <div class="frame rev d2"><img src="assets/skild-04.jpg" alt="Skild AI &mdash; frame 15" loading="lazy"><span class="fc">SKILD &middot; LOC 15</span></div>
+      <div class="frame rev"><img src="assets/skild-s1-skate.jpg" alt="Skild AI &mdash; S1, autonomous skateboard assembly" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; SKATE</span></div>
+      <div class="frame rev d1"><img src="assets/skild-s1-coffee.jpg" alt="Skild AI &mdash; S1, autonomous pour-over" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; POUR-OVER</span></div>
+      <div class="frame rev d2"><img src="assets/skild-s1-potting.jpg" alt="Skild AI &mdash; S1, autonomous potting" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; POTTING</span></div>
+      <div class="frame rev"><img src="assets/skild-s1-orangejuice.jpg" alt="Skild AI &mdash; S1, autonomous juicing" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; ORANGE JUICE</span></div>
     </div>
   </div>
 </section>
@@ -1575,86 +1601,62 @@ nav.addEventListener('click',e=>{ if(e.target.tagName==='A') nav.classList.remov
       light.classList.add('open');document.body.style.overflow='hidden';
     });
   });
-  // Skild AI film → youtube in the screening room
-  var skBtn=document.querySelector('#skildFilm .lp-play');
-  if(skBtn){
-    skBtn.addEventListener('click',function(e){
-      if(document.body.classList.contains('picking'))return;
-      e.stopPropagation();
-      frame.src='https://www.youtube-nocookie.com/embed/dTOdwnBmcC0?autoplay=1&rel=0';
-      cap.textContent='SKILD AI — FILM';
-      document.getElementById('mvPrev').style.display='none';
-      document.getElementById('mvNext').style.display='none';
-      light.classList.add('open');document.body.style.overflow='hidden';
-    });
-  }
-  var skBtn2=document.querySelector('#skildFilm2 .lp-play');
-  if(skBtn2){
-    skBtn2.addEventListener('click',function(e){
-      if(document.body.classList.contains('picking'))return;
-      e.stopPropagation();
-      frame.src='https://www.youtube-nocookie.com/embed/ZSXQW6PLJrM?autoplay=1&rel=0';
-      cap.textContent='SKILD AI — AUTONOMOUS';
-      document.getElementById('mvPrev').style.display='none';
-      document.getElementById('mvNext').style.display='none';
-      light.classList.add('open');document.body.style.overflow='hidden';
-    });
-  }
-  var skBtn3=document.querySelector('#skildFilm3 .lp-play');
-  if(skBtn3){
-    skBtn3.addEventListener('click',function(e){
-      if(document.body.classList.contains('picking'))return;
-      e.stopPropagation();
-      frame.src='https://www.youtube-nocookie.com/embed/6jSM3-2yt2s?autoplay=1&rel=0&start=7';
-      cap.textContent='SKILD AI — HUMANOID';
-      document.getElementById('mvPrev').style.display='none';
-      document.getElementById('mvNext').style.display='none';
-      light.classList.add('open');document.body.style.overflow='hidden';
-    });
-  }
-  var skBtn4=document.querySelector('#skildFilm4 .lp-play');
-  if(skBtn4){
-    skBtn4.addEventListener('click',function(e){
-      if(document.body.classList.contains('picking'))return;
-      e.stopPropagation();
-      frame.src='https://www.youtube-nocookie.com/embed/G9f9TA-dIws?autoplay=1&rel=0';
-      cap.textContent='SKILD AI — ONE BRAIN';
-      document.getElementById('mvPrev').style.display='none';
-      document.getElementById('mvNext').style.display='none';
-      light.classList.add('open');document.body.style.overflow='hidden';
-    });
-  }
-  var skBtn5=document.querySelector('#skildFilm5 .lp-play');
-  if(skBtn5){
-    skBtn5.addEventListener('click',function(e){
-      if(document.body.classList.contains('picking'))return;
-      e.stopPropagation();
-      frame.src='https://www.youtube-nocookie.com/embed/YRmjBdKKLsc?autoplay=1&rel=0';
-      cap.textContent='SKILD AI — FILM';
-      document.getElementById('mvPrev').style.display='none';
-      document.getElementById('mvNext').style.display='none';
-      light.classList.add('open');document.body.style.overflow='hidden';
-    });
-  }
-  var skBtn6=document.querySelector('#skildFilm6 .lp-play');
-  if(skBtn6){
-    skBtn6.addEventListener('click',function(e){
-      if(document.body.classList.contains('picking'))return;
-      e.stopPropagation();
+  // ─── Skild AI films → the screening room ───────────────────────
+  //  Key = the still's filename in assets/, without the .jpg.
+  //    yt   YouTube id        mp4  direct file url       start  seconds in
+  //  The film follows its still, so frames can be reordered freely in the
+  //  grid above. To add one: drop the still in assets/, add a line here.
+  var SKVIDS={
+    'opt-11'        :{yt:'YRmjBdKKLsc',                  cap:'SKILD AI — FILM'},
+    'rob-04'        :{yt:'dTOdwnBmcC0',                  cap:'SKILD AI — FILM'},
+    'skild-06'      :{yt:'G9f9TA-dIws',                  cap:'SKILD AI — ONE BRAIN'},
+    'rob-01'        :{yt:'6jSM3-2yt2s', start:7,         cap:'SKILD AI — HUMANOID'},
+    'skild-11'      :{yt:'ZSXQW6PLJrM',                  cap:'SKILD AI — AUTONOMOUS'},
+    'skild-13'      :{mp4:'https://dtkk46np7h1p6.cloudfront.net/videos/airpod.mp4',
+                                                         cap:'SKILD AI — AIRPODS'},
+    'skild-s1-hero' :{yt:'hr39FlEiCcQ',                  cap:'SKILD AI — S1'},
+    'skild-s1-skate'      :{mp4:'uploads/skild-s1-skate.mp4',       cap:'SKILD AI — S1 · SKATE'},
+    'skild-s1-coffee'     :{mp4:'uploads/skild-s1-coffee.mp4',      cap:'SKILD AI — S1 · POUR-OVER'},
+    'skild-s1-potting'    :{mp4:'uploads/skild-s1-potting.mp4',     cap:'SKILD AI — S1 · POTTING'},
+    'skild-s1-orangejuice':{mp4:'uploads/skild-s1-orangejuice.mp4', cap:'SKILD AI — S1 · ORANGE JUICE'}
+  };
+  function skPlay(v){
+    if(v.mp4){
       frame.src='about:blank';frame.style.display='none';
-      vid.style.display='';vid.src='https://dtkk46np7h1p6.cloudfront.net/videos/airpod.mp4';vid.play().catch(function(){});
-      cap.textContent='SKILD AI — AIRPODS';
-      document.getElementById('mvPrev').style.display='none';
-      document.getElementById('mvNext').style.display='none';
-      light.classList.add('open');document.body.style.overflow='hidden';
-    });
+      vid.style.display='';vid.src=v.mp4;vid.play().catch(function(){});
+    }else{
+      vid.pause();vid.removeAttribute('src');vid.load();vid.style.display='none';
+      frame.style.display='';
+      frame.src='https://www.youtube-nocookie.com/embed/'+v.yt+'?autoplay=1&rel=0'+(v.start?'&start='+v.start:'');
+    }
+    cap.textContent=v.cap;
+    document.getElementById('mvPrev').style.display='none';
+    document.getElementById('mvNext').style.display='none';
+    light.classList.add('open');document.body.style.overflow='hidden';
   }
+  document.querySelectorAll('.rel-hero .frame, .tech-frames .frame').forEach(function(fr){
+    var img=fr.querySelector('img');if(!img)return;
+    var v=SKVIDS[(img.getAttribute('src')||'').split('/').pop().replace(/\.jpg$/,'')];
+    if(!v||(!v.yt&&!v.mp4))return;              // no film yet → no play button
+    var big=!!fr.closest('.rel-hero');
+    var b=document.createElement('button');
+    b.type='button';b.className='lp-play'+(big?'':' lp-mini');
+    b.setAttribute('aria-label','Play '+v.cap);
+    b.innerHTML='<span class="lp-ring">\u25b6</span>'+(big?'<span class="lp-word">Play film</span>':'');
+    fr.style.position='relative';fr.style.cursor='pointer';fr.appendChild(b);
+    b.addEventListener('click',function(e){
+      if(document.body.classList.contains('picking'))return;
+      e.stopPropagation();
+      skPlay(v);
+    });
+  });
   var _close=close;
   close=function(){
     stage.classList.remove('vert');
     document.getElementById('mvPrev').style.display='';
     document.getElementById('mvNext').style.display='';
     frame.style.display='';
+    vid.style.display='none';   // else the emptied <video> covers the iframe
     _close();
   };
   light.addEventListener('click',function(e){if(e.target===light)close();});
