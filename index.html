@@ -1068,7 +1068,7 @@ footer{border-top:1px solid var(--rule-soft);padding:18px 28px 18px 64px;display
         <span class="rel-tag">New &middot; 25.08.2026</span>
         <h3 class="rel-ti">S1 &mdash; In-Context Learning for Robotics</h3>
         <p class="rel-note">One video prompt. No fine-tuning. The robot learns a ten-minute task it has never seen.</p>
-        <span class="rel-role">Director &middot; Skild AI</span>
+        <span class="rel-role">Cinematographer &middot; Skild AI</span>
         <a class="rel-link" href="https://skild.ai/blogs/s1" target="_blank" rel="noopener">Read the release &#8599;</a>
       </div>
     </div>
@@ -1089,10 +1089,10 @@ footer{border-top:1px solid var(--rule-soft);padding:18px 28px 18px 64px;display
       <div class="frame rev"><img src="assets/skild-11.jpg" alt="Skild AI &mdash; frame 13" loading="lazy"><span class="fc">SKILD &middot; LAB 13</span></div>
       <div class="frame rev d1"><img src="assets/skild-15.jpg" alt="Skild AI &mdash; frame 14" loading="lazy"><span class="fc">SKILD &middot; LAB 14</span></div>
       <div class="frame rev d2"><img src="assets/skild-04.jpg" alt="Skild AI &mdash; frame 15" loading="lazy"><span class="fc">SKILD &middot; LOC 15</span></div>
-      <div class="frame rev"><img src="assets/skild-s1-skate.jpg" alt="Skild AI &mdash; S1, autonomous skateboard assembly" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; SKATE</span></div>
-      <div class="frame rev d1"><img src="assets/skild-s1-coffee.jpg" alt="Skild AI &mdash; S1, autonomous pour-over" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; POUR-OVER</span></div>
+      <div class="frame rev"><img src="assets/skild-s1-coffee.jpg" alt="Skild AI &mdash; S1, autonomous pour-over" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; POUR-OVER</span></div>
+      <div class="frame rev d1"><img src="assets/skild-s1-skate.jpg" alt="Skild AI &mdash; S1, autonomous skateboard assembly" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; SKATE</span></div>
       <div class="frame rev d2"><img src="assets/skild-s1-potting.jpg" alt="Skild AI &mdash; S1, autonomous potting" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; POTTING</span></div>
-      <div class="frame rev"><img src="assets/skild-s1-orangejuice.jpg" alt="Skild AI &mdash; S1, autonomous juicing" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; ORANGE JUICE</span></div>
+      <div class="frame rev"><img src="assets/skild-mitsui.jpg" alt="Skild AI &mdash; Mitsui" loading="lazy"><span class="fc">SKILD &middot; MITSUI</span></div>
     </div>
   </div>
 </section>
@@ -1603,7 +1603,7 @@ nav.addEventListener('click',e=>{ if(e.target.tagName==='A') nav.classList.remov
   });
   // ─── Skild AI films → the screening room ───────────────────────
   //  Key = the still's filename in assets/, without the .jpg.
-  //    yt   YouTube id        mp4  direct file url       start  seconds in
+  //    yt   YouTube id        mp4  direct file url       src  any embed url       start  seconds in
   //  The film follows its still, so frames can be reordered freely in the
   //  grid above. To add one: drop the still in assets/, add a line here.
   var SKVIDS={
@@ -1618,7 +1618,8 @@ nav.addEventListener('click',e=>{ if(e.target.tagName==='A') nav.classList.remov
     'skild-s1-skate'      :{mp4:'uploads/skild-s1-skate.mp4',       cap:'SKILD AI — S1 · SKATE'},
     'skild-s1-coffee'     :{mp4:'uploads/skild-s1-coffee.mp4',      cap:'SKILD AI — S1 · POUR-OVER'},
     'skild-s1-potting'    :{mp4:'uploads/skild-s1-potting.mp4',     cap:'SKILD AI — S1 · POTTING'},
-    'skild-s1-orangejuice':{mp4:'uploads/skild-s1-orangejuice.mp4', cap:'SKILD AI — S1 · ORANGE JUICE'}
+    'skild-mitsui'        :{src:'https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7493595078297522176?compact=1',
+                                                         cap:'SKILD AI — MITSUI'}
   };
   function skPlay(v){
     if(v.mp4){
@@ -1627,7 +1628,7 @@ nav.addEventListener('click',e=>{ if(e.target.tagName==='A') nav.classList.remov
     }else{
       vid.pause();vid.removeAttribute('src');vid.load();vid.style.display='none';
       frame.style.display='';
-      frame.src='https://www.youtube-nocookie.com/embed/'+v.yt+'?autoplay=1&rel=0'+(v.start?'&start='+v.start:'');
+      frame.src=v.src||('https://www.youtube-nocookie.com/embed/'+v.yt+'?autoplay=1&rel=0'+(v.start?'&start='+v.start:''));
     }
     cap.textContent=v.cap;
     document.getElementById('mvPrev').style.display='none';
@@ -1637,7 +1638,7 @@ nav.addEventListener('click',e=>{ if(e.target.tagName==='A') nav.classList.remov
   document.querySelectorAll('.rel-hero .frame, .tech-frames .frame').forEach(function(fr){
     var img=fr.querySelector('img');if(!img)return;
     var v=SKVIDS[(img.getAttribute('src')||'').split('/').pop().replace(/\.jpg$/,'')];
-    if(!v||(!v.yt&&!v.mp4))return;              // no film yet → no play button
+    if(!v||(!v.yt&&!v.mp4&&!v.src))return;       // no film yet → no play button
     var big=!!fr.closest('.rel-hero');
     var b=document.createElement('button');
     b.type='button';b.className='lp-play'+(big?'':' lp-mini');
