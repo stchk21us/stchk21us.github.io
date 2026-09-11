@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /uploads/
+Sitemap: https://stkch21.com/sitemap.xml
