@@ -858,19 +858,9 @@ footer{border-top:1px solid var(--rule-soft);padding:18px 28px 18px 64px;display
       <span class="sh-pg">Current</span>
     </div>
     <p class="tech-lede rev d1"><span class="mnote" style="top:-8px;right:-170px;transform:rotate(2deg)">robots on camera</span>At Skild AI I translate robotics and foundation-model breakthroughs into cinematic stories — product films, demo reels and technical visualizations for enterprise, investors and consumers. Machines learning to move; me, <span class="pu u2">filming them learning</span>.</p>
-    <div class="subhead rev"><span class="sh-no">02.1 /</span><span class="label">Latest releases &mdash; $100M ARR &middot; S1</span></div>
+    <div class="subhead rev"><span class="sh-no">02.1 /</span><span class="label">Latest releases &mdash; S1 &middot; $100M ARR</span></div>
     <div class="rel-hero rev" id="relHero">
       <div class="rel-slide on">
-        <div class="frame"><img src="assets/skild-100m-hero.jpg" alt="Skild AI &mdash; $100M ARR" loading="lazy"><span class="fc">SKILD &middot; 100M ARR &middot; MASTER</span></div>
-        <div class="rel-meta">
-          <span class="rel-tag">New &middot; 09.09.2026</span>
-          <h3 class="rel-ti">Skild AI crosses $100M ARR</h3>
-          <p class="rel-note">Ten months from first deployment to a $100M run rate. Hundreds of robots working at 60+ companies.</p>
-          <span class="rel-role">Cinematographer &middot; Skild AI</span>
-          <a class="rel-link" href="https://skild.ai/blogs/skild-crosses-100m-arr" target="_blank" rel="noopener">Read the release &#8599;</a>
-        </div>
-      </div>
-      <div class="rel-slide">
         <div class="frame"><img src="assets/skild-s1-hero.jpg" alt="Skild AI &mdash; S1, autonomous assembly" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; MASTER</span></div>
         <div class="rel-meta">
           <span class="rel-tag">New &middot; 25.08.2026</span>
@@ -878,6 +868,16 @@ footer{border-top:1px solid var(--rule-soft);padding:18px 28px 18px 64px;display
           <p class="rel-note">One video prompt. No fine-tuning. The robot learns a ten-minute task it has never seen.</p>
           <span class="rel-role">Cinematographer &middot; Skild AI</span>
           <a class="rel-link" href="https://skild.ai/blogs/s1" target="_blank" rel="noopener">Read the release &#8599;</a>
+        </div>
+      </div>
+      <div class="rel-slide">
+        <div class="frame"><img src="assets/skild-100m-hero.jpg" alt="Skild AI &mdash; $100M ARR" loading="lazy"><span class="fc">SKILD &middot; 100M ARR &middot; MASTER</span></div>
+        <div class="rel-meta">
+          <span class="rel-tag">New &middot; 09.09.2026</span>
+          <h3 class="rel-ti">Skild AI crosses $100M ARR</h3>
+          <p class="rel-note">Ten months from first deployment to a $100M run rate. Hundreds of robots working at 60+ companies.</p>
+          <span class="rel-role">Cinematographer &middot; Skild AI</span>
+          <a class="rel-link" href="https://skild.ai/blogs/skild-crosses-100m-arr" target="_blank" rel="noopener">Read the release &#8599;</a>
         </div>
       </div>
       <div class="rel-idx">
@@ -1715,7 +1715,7 @@ nav.addEventListener('click',e=>{ if(e.target.tagName==='A') nav.classList.remov
     var hero=document.getElementById('relHero');if(!hero)return;
     var slides=[].slice.call(hero.querySelectorAll('.rel-slide'));if(slides.length<2)return;
     var dots=[].slice.call(hero.querySelectorAll('.rel-dot')),bar=hero.querySelector('.rel-bar b'),cnt=hero.querySelector('.rel-cnt');
-    var HOLD=8000,cur=0,timer=null,hover=false,seen=false;
+    var HOLD=6000,cur=0,timer=null,hover=false,seen=false;
     var still=matchMedia('(prefers-reduced-motion: reduce)').matches;
     function pad(n){return (n<10?'0':'')+n;}
     function stop(){clearTimeout(timer);timer=null;}
