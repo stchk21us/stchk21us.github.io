@@ -388,7 +388,24 @@ h1{
 .tech-frames .frame.zoom-crop img{transform:scale(1.18)}
 .tech-frames .frame.zoom-crop:hover img{transform:scale(1.18)}
 /* latest-release hero: one wide frame + a meta column */
-.rel-hero{display:grid;grid-template-columns:1fr 300px;gap:0 34px;align-items:start;margin-bottom:78px}
+.rel-hero{display:grid;grid-template-columns:100%;margin-bottom:78px}
+.rel-slide{grid-row:1;grid-column:1;display:grid;grid-template-columns:1fr 300px;gap:0 34px;align-items:start;opacity:0;visibility:hidden;transition:opacity .45s var(--ease),visibility 0s linear .45s}
+.rel-slide.on{opacity:1;visibility:visible;transition:opacity .9s var(--ease),visibility 0s}
+.rel-slide .frame{overflow:hidden}
+.rel-slide.on .frame img{animation:relSettle 2.2s var(--ease) both}
+.rel-slide.on .rel-meta>*{animation:relUp .8s var(--ease) both}
+.rel-slide.on .rel-meta>:nth-child(1){animation-delay:.12s}.rel-slide.on .rel-meta>:nth-child(2){animation-delay:.2s}
+.rel-slide.on .rel-meta>:nth-child(3){animation-delay:.28s}.rel-slide.on .rel-meta>:nth-child(4){animation-delay:.36s}
+.rel-slide.on .rel-meta>:nth-child(5){animation-delay:.44s}
+@keyframes relSettle{from{transform:scale(1.05)}to{transform:scale(1)}}
+@keyframes relUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.rel-idx{grid-row:2;grid-column:1;display:flex;align-items:center;gap:14px;margin-top:16px;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.rel-dot{background:none;border:0;padding:4px 0;font:inherit;letter-spacing:.2em;color:var(--ink-soft);cursor:pointer;transition:color .28s var(--ease)}
+.rel-dot:hover,.rel-dot.on{color:var(--red)}
+.rel-bar{position:relative;display:block;width:120px;height:1px;background:var(--rule)}
+.rel-bar b{position:absolute;left:0;top:-1px;height:3px;width:0;background:var(--red)}
+.rel-cnt{margin-left:auto}
+@media(prefers-reduced-motion:reduce){.rel-slide,.rel-slide .frame img,.rel-slide .rel-meta>*{animation:none!important;transition:none!important}}
 .rel-hero .frame{background:#000}
 .rel-hero .frame img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
 .rel-meta{display:flex;flex-direction:column;align-items:flex-start;gap:13px;border-top:1px solid var(--rule);padding-top:14px}
@@ -840,15 +857,33 @@ footer{border-top:1px solid var(--rule-soft);padding:18px 28px 18px 64px;display
       <span class="sh-pg">Current</span>
     </div>
     <p class="tech-lede rev d1"><span class="mnote" style="top:-8px;right:-170px;transform:rotate(2deg)">robots on camera</span>At Skild AI I translate robotics and foundation-model breakthroughs into cinematic stories — product films, demo reels and technical visualizations for enterprise, investors and consumers. Machines learning to move; me, <span class="pu u2">filming them learning</span>.</p>
-    <div class="subhead rev"><span class="sh-no">02.1 /</span><span class="label">Latest release &mdash; S1</span></div>
-    <div class="rel-hero rev">
-      <div class="frame"><img src="assets/skild-s1-hero.jpg" alt="Skild AI &mdash; S1, autonomous assembly" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; MASTER</span></div>
-      <div class="rel-meta">
-        <span class="rel-tag">New &middot; 25.08.2026</span>
-        <h3 class="rel-ti">S1 &mdash; In-Context Learning for Robotics</h3>
-        <p class="rel-note">One video prompt. No fine-tuning. The robot learns a ten-minute task it has never seen.</p>
-        <span class="rel-role">Cinematographer &middot; Skild AI</span>
-        <a class="rel-link" href="https://skild.ai/blogs/s1" target="_blank" rel="noopener">Read the release &#8599;</a>
+    <div class="subhead rev"><span class="sh-no">02.1 /</span><span class="label">Latest releases &mdash; $100M ARR &middot; S1</span></div>
+    <div class="rel-hero rev" id="relHero">
+      <div class="rel-slide on">
+        <div class="frame"><img src="assets/skild-100m-hero.jpg" alt="Skild AI &mdash; $100M ARR" loading="lazy"><span class="fc">SKILD &middot; 100M ARR &middot; MASTER</span></div>
+        <div class="rel-meta">
+          <span class="rel-tag">New &middot; 09.09.2026</span>
+          <h3 class="rel-ti">Skild AI crosses $100M ARR</h3>
+          <p class="rel-note">Ten months from first deployment to a $100M run rate. Hundreds of robots working at 60+ companies.</p>
+          <span class="rel-role">Cinematographer &middot; Skild AI</span>
+          <a class="rel-link" href="https://skild.ai/blogs/skild-crosses-100m-arr" target="_blank" rel="noopener">Read the release &#8599;</a>
+        </div>
+      </div>
+      <div class="rel-slide">
+        <div class="frame"><img src="assets/skild-s1-hero.jpg" alt="Skild AI &mdash; S1, autonomous assembly" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; MASTER</span></div>
+        <div class="rel-meta">
+          <span class="rel-tag">New &middot; 25.08.2026</span>
+          <h3 class="rel-ti">S1 &mdash; In-Context Learning for Robotics</h3>
+          <p class="rel-note">One video prompt. No fine-tuning. The robot learns a ten-minute task it has never seen.</p>
+          <span class="rel-role">Cinematographer &middot; Skild AI</span>
+          <a class="rel-link" href="https://skild.ai/blogs/s1" target="_blank" rel="noopener">Read the release &#8599;</a>
+        </div>
+      </div>
+      <div class="rel-idx">
+        <button type="button" class="rel-dot on" aria-label="Show release 1 of 2">01</button>
+        <i class="rel-bar" aria-hidden="true"><b></b></i>
+        <button type="button" class="rel-dot" aria-label="Show release 2 of 2">02</button>
+        <span class="rel-cnt">Release 01 / 02</span>
       </div>
     </div>
     <div class="subhead rev"><span class="sh-no">02.2 /</span><span class="label">On location</span></div>
@@ -872,6 +907,7 @@ footer{border-top:1px solid var(--rule-soft);padding:18px 28px 18px 64px;display
       <div class="frame rev d1"><img src="assets/skild-s1-skate.jpg" alt="Skild AI &mdash; S1, autonomous skateboard assembly" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; SKATE</span></div>
       <div class="frame rev d2"><img src="assets/skild-s1-potting.jpg" alt="Skild AI &mdash; S1, autonomous potting" loading="lazy"><span class="fc">SKILD &middot; S1 &middot; POTTING</span></div>
       <div class="frame rev"><img src="assets/skild-mitsui.jpg" alt="Skild AI &mdash; Mitsui" loading="lazy"><span class="fc">SKILD &middot; MITSUI</span></div>
+      <div class="frame rev d1"><img src="assets/skild-100m.jpg" alt="Skild AI &mdash; $100M ARR" loading="lazy"><span class="fc">SKILD &middot; 100M ARR</span></div>
     </div>
   </div>
 </section>
@@ -1638,7 +1674,9 @@ nav.addEventListener('click',e=>{ if(e.target.tagName==='A') nav.classList.remov
     'skild-s1-coffee'     :{mp4:'uploads/skild-s1-coffee.mp4',      cap:'SKILD AI — S1 · POUR-OVER'},
     'skild-s1-potting'    :{mp4:'uploads/skild-s1-potting.mp4',     cap:'SKILD AI — S1 · POTTING'},
     'skild-mitsui'        :{src:'https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7493595078297522176?compact=1',
-                                                         cap:'SKILD AI — MITSUI'}
+                                                         cap:'SKILD AI — MITSUI'},
+    'skild-100m-hero'     :{yt:'', cap:'SKILD AI — 100M ARR'},   // film id pending
+    'skild-100m'          :{yt:'', cap:'SKILD AI — 100M ARR'}    // film id pending
   };
   function skPlay(v){
     if(v.mp4){
@@ -1670,6 +1708,37 @@ nav.addEventListener('click',e=>{ if(e.target.tagName==='A') nav.classList.remov
       skPlay(v);
     });
   });
+  // ---- latest-release rotation: two releases share one block ----
+  (function(){
+    var hero=document.getElementById('relHero');if(!hero)return;
+    var slides=[].slice.call(hero.querySelectorAll('.rel-slide'));if(slides.length<2)return;
+    var dots=[].slice.call(hero.querySelectorAll('.rel-dot')),bar=hero.querySelector('.rel-bar b'),cnt=hero.querySelector('.rel-cnt');
+    var HOLD=8000,cur=0,timer=null,hover=false,seen=false;
+    var still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function pad(n){return (n<10?'0':'')+n;}
+    function stop(){clearTimeout(timer);timer=null;}
+    function arm(){
+      stop();
+      if(bar){bar.style.transition='none';bar.style.width='0';void bar.offsetWidth;}
+      if(still||hover||!seen||document.hidden||light.classList.contains('open'))return;
+      if(bar){bar.style.transition='width '+HOLD+'ms linear';bar.style.width='100%';}
+      timer=setTimeout(function(){show(cur+1);},HOLD);
+    }
+    function show(i){
+      cur=(i+slides.length)%slides.length;
+      slides.forEach(function(s,k){s.classList.toggle('on',k===cur);s.setAttribute('aria-hidden',k===cur?'false':'true');});
+      dots.forEach(function(d,k){d.classList.toggle('on',k===cur);});
+      if(cnt)cnt.textContent='Release '+pad(cur+1)+' / '+pad(slides.length);
+      arm();
+    }
+    dots.forEach(function(d,k){d.addEventListener('click',function(){show(k);});});
+    hero.addEventListener('mouseenter',function(){hover=true;stop();if(bar){var w=getComputedStyle(bar).width;bar.style.transition='none';bar.style.width=w;}});
+    hero.addEventListener('mouseleave',function(){hover=false;arm();});
+    document.addEventListener('visibilitychange',function(){if(document.hidden)stop();else arm();});
+    new MutationObserver(function(){if(light.classList.contains('open'))stop();else arm();}).observe(light,{attributes:true,attributeFilter:['class']});
+    new IntersectionObserver(function(en){seen=en[0].isIntersecting;if(seen)arm();else stop();},{threshold:.35}).observe(hero);
+    slides.forEach(function(s,k){s.setAttribute('aria-hidden',k?'true':'false');});
+  })();
   var _close=close;
   close=function(){
     stage.classList.remove('vert');
