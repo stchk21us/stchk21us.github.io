@@ -2029,6 +2029,77 @@ html.fx #fxCue.show{opacity:.8}
 })();
 </script>
 
+<!-- ===== fine pen: a hairline of the page's ink follows the pointer and dries; resting taps a dot or two.
+     Drawn at 1x on a small layer that travels with the line, so it costs no frames on Retina screens.
+     Mouse only, off under reduced motion; no ink over media, video or the screening room. ===== -->
+<canvas id="fpInk" aria-hidden="true" style="position:fixed;left:0;top:0;width:0;height:0;display:none;pointer-events:none;z-index:190;will-change:transform"></canvas>
+<script>
+(function(){
+  if(!matchMedia('(pointer:fine)').matches||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var cv=document.getElementById('fpInk'), ctx=cv.getContext('2d'), DPR=1, raf=null, shown=false;
+  var INK='23,21,15', R={x:0,y:0,w:0,h:0};
+  // the canvas only covers the fresh part of the line and moves with it: a small layer to paint and composite
+  function fit(x0,y0,x1,y1){
+    var m=60, needW=x1-x0+m*2, needH=y1-y0+m*2;
+    if(needW>R.w||needH>R.h){                       // grow in 256 px steps: few reallocations
+      R.w=Math.ceil(needW/256)*256; R.h=Math.ceil(needH/256)*256;
+      cv.width=R.w*DPR; cv.height=R.h*DPR; cv.style.width=R.w+'px'; cv.style.height=R.h+'px';
+    }
+    if(x0<R.x||y0<R.y||x1>R.x+R.w||y1>R.y+R.h||!shown){ // move the layer, keep its pixels
+      R.x=Math.floor((x0+x1)/2-R.w/2); R.y=Math.floor((y0+y1)/2-R.h/2);
+      cv.style.transform='translate('+R.x+'px,'+R.y+'px)';
+    }
+    if(!shown){ cv.style.display='block'; shown=true; }
+  }
+  function hide(){ if(shown){ cv.style.display='none'; shown=false; } }
+  var light=document.getElementById('mvLight');
+  function onPaper(t){ return !(t&&t.closest&&t.closest('.frame,.cell,img,video,iframe,figure,#mvLight,.videowall,.clipwall,.shortwall,.tech-frames,.lp-play')); }
+  var mx=0,my=0,px=0,py=0,has=false,paper=true,last=0,dotsLeft=0,nextDot=0;
+  var pts=[], dots=[], LIFE=900, DOT_LIFE=1600;
+  function kick(){ if(!raf) raf=requestAnimationFrame(tick); }
+  document.addEventListener('mousemove',function(e){
+    var now=performance.now(), was=paper;
+    paper=onPaper(e.target)&&!(light&&light.classList.contains('open'));
+    mx=e.clientX; my=e.clientY;
+    if(!has||!was||!paper){ px=mx; py=my; pts.push({gap:true,t:now}); }
+    has=true; last=now; dotsLeft=paper?1+Math.floor(Math.random()*3):0; nextDot=now+260;
+    kick();
+  },{passive:true});
+  document.addEventListener('mouseleave',function(){ has=false; });
+  addEventListener('scroll',function(){ if(pts.length||dots.length) kick(); },{passive:true});
+  function tick(now){
+    raf=null; var sy=scrollY;
+    if(has&&paper){
+      var dx=mx-px, dy=my-py, d=Math.hypot(dx,dy);
+      if(d>.4){ px+=dx*.5; py+=dy*.5; var v=Math.min(1,d/40); pts.push({x:px,y:py+sy,t:now,w:1.05-.55*v,a:.62-.32*v}); }
+    }
+    if(has&&paper&&dotsLeft>0&&now>nextDot&&now-last>=260){
+      var j=dots.length&&now-last>300?2.6:0;
+      dots.push({x:mx+(Math.random()-.5)*j*2,y:my+sy+(Math.random()-.5)*j*2,t:now,r:.9+Math.random()*.55});
+      dotsLeft--; nextDot=now+180+Math.random()*260;
+    }
+    var keep=[]; for(var i=0;i<pts.length;i++) if(now-pts[i].t<LIFE) keep.push(pts[i]); pts=keep;
+    var kd=[]; for(var q=0;q<dots.length;q++) if(now-dots[q].t<DOT_LIFE) kd.push(dots[q]); dots=kd;
+    var ink=false; for(var z=0;z<pts.length;z++) if(!pts[z].gap){ ink=true; break; }
+    if(!ink&&!dots.length){ hide(); if(has&&paper&&dotsLeft>0) raf=requestAnimationFrame(tick); return; }
+    var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+    for(var u=0;u<pts.length;u++){ var P=pts[u]; if(P.gap) continue; if(P.x<x0)x0=P.x; if(P.x>x1)x1=P.x; if(P.y-sy<y0)y0=P.y-sy; if(P.y-sy>y1)y1=P.y-sy; }
+    for(var v2=0;v2<dots.length;v2++){ var Q=dots[v2]; if(Q.x<x0)x0=Q.x; if(Q.x>x1)x1=Q.x; if(Q.y-sy<y0)y0=Q.y-sy; if(Q.y-sy>y1)y1=Q.y-sy; }
+    fit(x0-4,y0-4,x1+4,y1+4);
+    ctx.setTransform(DPR,0,0,DPR,-R.x*DPR,-R.y*DPR); ctx.clearRect(R.x,R.y,R.w,R.h); ctx.lineCap='round'; ctx.lineJoin='round';
+    for(var k=2;k<pts.length;k++){
+      var a=pts[k-2],b=pts[k-1],c=pts[k]; if(a.gap||b.gap||c.gap) continue;
+      var age=(now-c.t)/LIFE, al=c.a*(1-age)*(1-age); if(al<=.01) continue;
+      ctx.strokeStyle='rgba('+INK+','+al.toFixed(3)+')'; ctx.lineWidth=c.w*(1-age*.35);
+      ctx.beginPath(); ctx.moveTo((a.x+b.x)/2,(a.y+b.y)/2-sy); ctx.quadraticCurveTo(b.x,b.y-sy,(b.x+c.x)/2,(b.y+c.y)/2-sy); ctx.stroke();
+    }
+    for(var n=0;n<dots.length;n++){ var D=dots[n], ag=(now-D.t)/DOT_LIFE, grow=Math.min(1,(now-D.t)/90), al2=.78*(ag<.55?1:1-(ag-.55)/.45);
+      ctx.fillStyle='rgba('+INK+','+al2.toFixed(3)+')'; ctx.beginPath(); ctx.arc(D.x,D.y-sy,D.r*grow,0,Math.PI*2); ctx.fill(); }
+    raf=requestAnimationFrame(tick);
+  }
+})();
+</script>
+
 <!-- visitor stats: dashboard at https://ceofixer.goatcounter.com -->
 <script data-goatcounter="https://ceofixer.goatcounter.com/count"
         async src="https://gc.zgo.at/count.js"></script>
