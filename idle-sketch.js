@@ -36,7 +36,10 @@
     blueChance: 0.12,       // how often a scene writes its notes in blue
     weights: {},            // per-scene probability weights, e.g. { frame: 2, blot: 0.5 }
     ignore: 'a,button,input,select,textarea,label,summary,video,iframe,audio,[role="button"],[contenteditable],.frame,.cell,.lp-play,#mvLight',
-    zIndex: 190
+    zIndex: 190,
+    // the pen while moving: now and then a hairline follows the pointer and dries away.
+    // chance = share of mouse movements that draw; false switches it off.
+    trail: { chance: .35, life: 950, width: 1.05, alpha: .58, dotChance: .5 }
   };
 
   /* ------------------------------------------------ single-stroke handwriting
@@ -594,12 +597,51 @@
   function onMove(e) {
     var dx = e.clientX - mx, dy = e.clientY - my; mx = e.clientX; my = e.clientY;
     var t = e.target; overIgnored = !!(t && t.closest && t.closest(cfg.ignore));
-    if (Math.abs(dx) + Math.abs(dy) > .5) stir();
+    if (Math.abs(dx) + Math.abs(dy) > .5) { stir(); if (cv && cfg.trail) trailMove(e, performance.now()); }
+  }
+
+  /* ------------------------------------------------------------- moving pen */
+  var tcv = null, tctx = null, traf = null, tpts = [], burst = false, burstAt = 0, tpx = 0, tpy = 0, tpaper = false, tmoved = 0, tdot = null;
+  function tfit() { tcv.width = W * DPR; tcv.height = H * DPR; tctx.setTransform(DPR, 0, 0, DPR, 0, 0); }
+  function tkick() { if (!traf) traf = requestAnimationFrame(trailTick); }
+  function trailMove(e, now) {
+    var T = cfg.trail; if (!T) return;
+    if (now - tmoved > 450) {                      // a new movement: does the pen touch the paper this time?
+      burst = rnd() < T.chance; burstAt = now; tpx = e.clientX; tpy = e.clientY; tpts.push({ gap: true, t: now });
+    }
+    tmoved = now;
+    var t = e.target, was = tpaper;
+    tpaper = burst && !(t && t.closest && t.closest(cfg.ignore + ',img,figure,svg'));
+    if (tpaper && !was) { tpx = e.clientX; tpy = e.clientY; tpts.push({ gap: true, t: now }); }
+    if (tpaper || tpts.length) tkick();
+  }
+  function trailTick(now) {
+    traf = null; var T = cfg.trail; if (!T || !running) return;
+    if (tpaper && now - tmoved < 450) {
+      var dx = mx - tpx, dy = my - tpy, d = Math.hypot(dx, dy);
+      if (d > .4) { tpx += dx * .5; tpy += dy * .5; var v = Math.min(1, d / 40); tpts.push({ x: tpx, y: tpy, t: now, w: T.width * (1 - .5 * v), a: T.alpha * (1 - .45 * v) }); }
+    } else if (tpaper && !tdot && now - tmoved >= 450 && rnd() < T.dotChance) { tdot = { x: mx, y: my, t: now }; tpaper = false; }
+    else if (tpaper) tpaper = false;
+    var keep = []; for (var i = 0; i < tpts.length; i++) if (now - tpts[i].t < T.life) keep.push(tpts[i]); tpts = keep;
+    if (tdot && now - tdot.t > T.life * 1.6) tdot = null;
+    if (!tpts.length && !tdot) { if (tcv.style.display !== 'none') { tctx.clearRect(0, 0, W, H); tcv.style.display = 'none'; } return; }
+    if (tcv.style.display === 'none') { tfit(); tcv.style.display = 'block'; }
+    tctx.clearRect(0, 0, W, H); tctx.lineCap = 'round'; tctx.lineJoin = 'round';
+    var ink = cfg.colors.ink;
+    for (var k = 2; k < tpts.length; k++) {
+      var a = tpts[k - 2], b = tpts[k - 1], c = tpts[k]; if (a.gap || b.gap || c.gap) continue;
+      var age = (now - c.t) / T.life, al = c.a * (1 - age) * (1 - age); if (al <= .01) continue;
+      tctx.globalAlpha = al; tctx.strokeStyle = ink; tctx.lineWidth = c.w * (1 - age * .35);
+      tctx.beginPath(); tctx.moveTo((a.x + b.x) / 2, (a.y + b.y) / 2); tctx.quadraticCurveTo(b.x, b.y, (b.x + c.x) / 2, (b.y + c.y) / 2); tctx.stroke();
+    }
+    if (tdot) { var ag = (now - tdot.t) / (T.life * 1.6), g = Math.min(1, (now - tdot.t) / 90); tctx.globalAlpha = .75 * (ag < .55 ? 1 : 1 - (ag - .55) / .45); tctx.fillStyle = ink; tctx.beginPath(); tctx.arc(tdot.x, tdot.y, 1.15 * g, 0, 6.283); tctx.fill(); }
+    tctx.globalAlpha = 1;
+    tkick();
   }
 
   /* --------------------------------------------------------------------- API */
   var IdleSketch = {
-    scenes: SCENES, copy: COPY,
+    scenes: SCENES, copy: COPY, defaults: DEFAULTS,
     start: function (opts) {
       if (running) return IdleSketch;
       cfg = Object.assign({}, DEFAULTS, opts || {}); cfg.colors = Object.assign({}, DEFAULTS.colors, (opts && opts.colors) || {});
@@ -607,20 +649,26 @@
       cv = document.createElement('canvas'); cv.setAttribute('aria-hidden', 'true');
       cv.style.cssText = 'position:fixed;left:0;top:0;width:0;height:0;display:none;pointer-events:none;mix-blend-mode:multiply;z-index:' + cfg.zIndex;
       document.body.appendChild(cv); ctx = cv.getContext('2d'); size();
-      addEventListener('resize', function () { size(); textIndex = null; }); document.addEventListener('mousemove', onMove, { passive: true });
+      if (cfg.trail) {                          // the moving pen: its own light layer, shown only while there is ink
+        cfg.trail = Object.assign({}, DEFAULTS.trail, cfg.trail === true ? {} : cfg.trail);
+        tcv = document.createElement('canvas'); tcv.setAttribute('aria-hidden', 'true');
+        tcv.style.cssText = 'position:fixed;left:0;top:0;width:100%;height:100%;display:none;pointer-events:none;z-index:' + (cfg.zIndex - 1);
+        document.body.appendChild(tcv); tctx = tcv.getContext('2d');
+      }
+      addEventListener('resize', function () { size(); textIndex = null; if (tcv && tcv.style.display !== 'none') tfit(); }); document.addEventListener('mousemove', onMove, { passive: true });
       addEventListener('scroll', stir, { passive: true }); addEventListener('wheel', stir, { passive: true });
       document.addEventListener('mousedown', stir); document.addEventListener('keydown', function (e) { if (!IdleSketch._keys) stir(); });
       document.addEventListener('mouseleave', function () { mx = -1; stir(); });
       running = true; lastMove = performance.now(); idleAt = lastMove + cfg.idleDelay;
       return IdleSketch;
     },
-    stop: function () { running = false; clearTimeout(timer); scene = null; fading = null; if (cv) hide(); return IdleSketch; },
+    stop: function () { running = false; clearTimeout(timer); scene = null; fading = null; if (cv) hide(); tpts = []; tdot = null; tpaper = false; if (tcv) { tctx.clearRect(0, 0, W, H); tcv.style.display = 'none'; } return IdleSketch; },
     resume: function () { if (cv) { running = true; stir(); } return IdleSketch; },
     // draw a named scene at the pointer right now (for previews and tests)
     play: function (name) { if (!running || !SCENES[name]) return null; clearTimeout(timer); fading = null; scene = build(name); if (!raf) raf = requestAnimationFrame(tick); return scene; },
     // register a scene: fn(S) draws with S.line / stroke / rect / arrow / text / dot / blot / rec / wait
     addScene: function (name, fn, weight) { SCENES[name] = fn; if (weight != null && cfg) cfg.weights[name] = weight; return IdleSketch; },
-    state: function () { return { scene: scene && scene.name, fading: !!fading, box: scene && scene.box, last: lastName }; }
+    state: function () { return { scene: scene && scene.name, fading: !!fading, box: scene && scene.box, last: lastName, trail: tpts.filter(function (p) { return !p.gap; }).length, pen: burst }; }
   };
   global.IdleSketch = IdleSketch;
 })(window);
