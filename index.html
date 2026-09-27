@@ -9,6 +9,7 @@
 // text wraps exactly like on desktop, pinch-zoom stays available.
 if (Math.min(screen.width, screen.height) < 761) {
   document.getElementById('vpMeta').setAttribute('content', 'width=1100, viewport-fit=cover');
+  document.documentElement.classList.add('m');
 }
 </script>
 <title>Sergii Tkachenko — Film Director &amp; Cinematographer, San Francisco Bay Area · Robotics &amp; AI Films</title>
@@ -1015,7 +1016,7 @@ footer{border-top:1px solid var(--rule-soft);padding:18px 28px 18px 64px;display
       </div>
       <div class="cin-info">
         <span class="label rev">Feature drama · France / Ukraine · 2019–2023</span>
-        <h3 class="rev d1" style="position:relative">La Plage<span class="mnote" style="top:8px;right:-150px;transform:rotate(2deg)">the big one</span></h3>
+        <h3 class="rev d1" style="position:relative">La Plage<span class="mnote mn-lp" style="top:8px;right:-150px;transform:rotate(2deg)">the big one</span></h3>
         <p class="syn rev d2">Ukrainian independent film — an anthem of the new wave. Free relationships, non-traditional couples, parental care. Love and infatuation, loyalty and betrayal. It is about those who are not stuck in the world of rules and outdated traditions: heroes break through to their truth through cinematography, music, drugs and sex. Age and gender do not matter — their closeness is a bright emotional outburst against Normandy landscapes, proving that <mark class="mk">love is beautiful in any form</mark>. What destroys principles? An instant feeling or a conscious passion? We are witnessing the beginning of a protest that became <span class="pu u2">a personal revolution</span>.</p>
         <div class="credits rev d3">
           <div><span>Written &amp; directed</span><b>Sergii Tkachenko</b></div>
@@ -1514,6 +1515,18 @@ nav.addEventListener('click',e=>{ if(e.target.tagName==='A') nav.classList.remov
 .lp-play.lp-mini .lp-ring{width:52px;height:52px;font-size:14px}
 .lp-play.lp-mini .lp-word{font-size:9.5px;letter-spacing:.24em}
 @media(max-width:760px){#mvLight{padding:14px}#mvLight .mvl-bar{flex-wrap:wrap;justify-content:center}}
+/* phones: the scaled desktop layout, with narrower page edges and nothing sticking out past them */
+html.m,html.m body{overflow-x:clip}
+html.m .wrap{padding:0 22px 0 50px}
+html.m header{padding:14px 22px 14px 50px}
+html.m .punch{left:5px}
+html.m .punch i{width:22px;height:15px;border-radius:4px}
+html.m .fold{left:calc(50% - min(50vw,640px) + 36px)}
+html.m .tear{width:18px}
+html.m .pgno{right:22px}
+html.m .cutto{padding-right:22px}
+html.m .rev-mark,html.m #pager{right:calc(50% - min(50vw,640px) + 16px)}
+html.m .mn-lp{right:auto!important;left:268px!important;top:14px!important}
 </style>
 <div id="mvLight" role="dialog" aria-label="Music video player">
   <div class="mvl-stage"><iframe id="mvFrame" src="about:blank" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe><video id="mvVid" controls playsinline loop style="position:absolute;inset:0;width:100%;height:100%;display:none;background:#000"></video></div>
